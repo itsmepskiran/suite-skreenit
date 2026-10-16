@@ -4,11 +4,12 @@ import type { ConfigContext, ExpoConfig } from 'expo/config';
 const API_BASE_URL = process.env.API_BASE_URL ?? 'https://api.skreenit.com';
 
 // Skreenit Suite is its own store app (docs/skreenit-suite/DESIGN.md in mac-skreenit), separate from the
-// hiring app. No EAS project id / owner yet: run `eas init` once the store listing exists.
+// hiring app. EAS project created 2026-10-16 (see extra.eas.projectId below).
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
   name: 'Skreenit Suite',
   slug: 'mobile-suite-skreenit',
+  owner: 'itsmepskiran',
   version: '1.0.0',
   orientation: 'portrait',
   icon: './assets/images/icon.png',
@@ -33,5 +34,5 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     'expo-status-bar',
   ],
   experiments: { typedRoutes: true },
-  extra: { apiBaseUrl: API_BASE_URL },
+  extra: { apiBaseUrl: API_BASE_URL, eas: { projectId: 'd4108729-dea5-4fe6-9440-fc94650a1feb' } },
 });
