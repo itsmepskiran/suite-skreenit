@@ -1,0 +1,9 @@
+node_modules/
+.expo/
+dist/
+ios/
+android/
+.env*
+*.log
+_import/
+expo-env.d.ts
