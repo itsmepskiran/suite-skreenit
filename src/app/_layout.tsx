@@ -1,6 +1,6 @@
 import '@/lib/crash';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { Stack, usePathname } from 'expo-router';
+import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
@@ -14,18 +14,6 @@ SplashScreen.preventAutoHideAsync().catch(() => {});
 export { ErrorBoundary } from 'expo-router';
 
 const queryClient = new QueryClient({ defaultOptions: { queries: { retry: 1 } } });
-
-// Temporary: a status line at the bottom, so a blank screen can still be diagnosed (is the app alive, which screen, what state).
-function DebugFooter() {
-  const status = useSession((s) => s.status);
-  const isStaff = useSession((s) => !!s.staff);
-  const path = usePathname();
-  return (
-    <View pointerEvents="none" style={{ position: 'absolute', left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.75)', paddingVertical: 4, paddingHorizontal: 8 }}>
-      <Text style={{ color: '#fff', fontSize: 11 }}>suite · {status}{isStaff ? ' · staff' : ''} · {path}</Text>
-    </View>
-  );
-}
 
 export default function RootLayout() {
   const status = useSession((s) => s.status);
@@ -65,7 +53,6 @@ export default function RootLayout() {
           <Stack.Screen name="(auth)" />
         </Stack.Protected>
       </Stack>
-      <DebugFooter />
     </QueryClientProvider>
   );
 }
