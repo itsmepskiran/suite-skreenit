@@ -33,6 +33,10 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     ['expo-splash-screen', { backgroundColor: '#4F46E5', image: './assets/images/splash-icon.png', imageWidth: 160 }],
     'expo-status-bar',
   ],
+  // Over-the-air updates: screens and logic can be fixed without a new store download (eas update --branch <channel>).
+  // The runtime version follows the native build, so an update only reaches builds it is compatible with.
+  updates: { url: 'https://u.expo.dev/d4108729-dea5-4fe6-9440-fc94650a1feb' },
+  runtimeVersion: { policy: 'fingerprint' },
   experiments: { typedRoutes: true },
   extra: { apiBaseUrl: API_BASE_URL, eas: { projectId: 'd4108729-dea5-4fe6-9440-fc94650a1feb' } },
 });

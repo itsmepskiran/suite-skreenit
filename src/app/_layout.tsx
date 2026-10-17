@@ -12,6 +12,7 @@ const queryClient = new QueryClient({ defaultOptions: { queries: { retry: 1 } } 
 
 export default function RootLayout() {
   const status = useSession((s) => s.status);
+  const isStaff = useSession((s) => !!s.staff);
 
   useEffect(() => {
     void useSession.getState().hydrate();
@@ -26,8 +27,11 @@ export default function RootLayout() {
     <QueryClientProvider client={queryClient}>
       <StatusBar style="dark" />
       <Stack screenOptions={{ headerShown: false }}>
-        <Stack.Protected guard={status === 'signedIn'}>
+        <Stack.Protected guard={status === 'signedIn' && !isStaff}>
           <Stack.Screen name="(app)" />
+        </Stack.Protected>
+        <Stack.Protected guard={status === 'signedIn' && isStaff}>
+          <Stack.Screen name="(staff)" />
         </Stack.Protected>
         <Stack.Protected guard={status === 'signedOut'}>
           <Stack.Screen name="(auth)" />

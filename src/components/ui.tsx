@@ -18,9 +18,10 @@ export const colors = {
   infoFg: '#3730A3',
 };
 
-export function T({ children, style, bold, small, muted, title }: { children: ReactNode; style?: object; bold?: boolean; small?: boolean; muted?: boolean; title?: boolean }) {
+export function T({ children, style, bold, small, muted, title, selectable }: { children: ReactNode; style?: object; bold?: boolean; small?: boolean; muted?: boolean; title?: boolean; selectable?: boolean }) {
   return (
     <Text
+      selectable={selectable}
       style={[
         { color: muted ? colors.muted : colors.text, fontSize: small ? 13 : 15 },
         bold && { fontWeight: '600' },
@@ -101,3 +102,20 @@ const styles = StyleSheet.create({
   sheet: { maxHeight: '90%', backgroundColor: colors.surface, borderTopLeftRadius: 16, borderTopRightRadius: 16 },
   sheetHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingTop: 18 },
 });
+
+/** A bottom sheet with a title and scrolling content (no built-in submit button). */
+export function Panel({ visible, title, onClose, children }: { visible: boolean; title: string; onClose: () => void; children: ReactNode }) {
+  return (
+    <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
+      <View style={styles.backdrop}>
+        <View style={styles.sheet}>
+          <View style={styles.sheetHeader}>
+            <T title style={{ flex: 1, fontSize: 18 }}>{title}</T>
+            <Pressable onPress={onClose} hitSlop={12}><FontAwesome6 name="xmark" size={18} color={colors.text} /></Pressable>
+          </View>
+          <ScrollView contentContainerStyle={{ padding: 20, gap: 12 }} keyboardShouldPersistTaps="handled">{children}</ScrollView>
+        </View>
+      </View>
+    </Modal>
+  );
+}

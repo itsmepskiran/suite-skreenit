@@ -96,3 +96,21 @@ export const listBranches = () => request<Envelope<Branch[]>>('/branches');
 export const createBranch = (b: { name: string; state?: string; gstin?: string }) =>
   request<Envelope<Branch>>('/branches', json('POST', b));
 export const listUsers = () => request<Envelope<SuiteUser[]>>('/users');
+
+/** Any Suite operation. Returns the `data` of the {ok, data} envelope. Used by the generated screens. */
+export async function callApi(
+  method: string,
+  path: string,
+  opts: { query?: Record<string, unknown>; json?: unknown; form?: FormData } = {},
+): Promise<unknown> {
+  const qs = Object.entries(opts.query ?? {})
+    .filter(([, v]) => v !== undefined && v !== null && v !== '')
+    .map(([k, v]) => `${encodeURIComponent(k)}=${encodeURIComponent(String(v))}`)
+    .join('&');
+  const init: RequestInit = opts.form ? { method, body: opts.form } : opts.json !== undefined ? json(method, opts.json) : { method };
+  const res = await request<{ ok?: boolean; data?: unknown }>(`${path}${qs ? `?${qs}` : ''}`, init);
+  return res && typeof res === 'object' && 'data' in res ? res.data : res;
+}
+
+/** Fill {param} placeholders of an operation path. */
+export const fillPath = (path: string, params: Record<string, string>) => path.replace(/\{([^}]+)\}/g, (_m, k) => encodeURIComponent(params[k] ?? ''));
