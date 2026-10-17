@@ -25,11 +25,14 @@ interface SessionState {
   signOut: () => Promise<void>;
 }
 
+// Reading the phone's secure storage should be instant; if it ever stalls, treat it as empty rather than hanging the app.
+const withTimeout = <T,>(p: Promise<T>, ms: number, fallback: T): Promise<T> => Promise.race([p, new Promise<T>((r) => setTimeout(() => r(fallback), ms))]);
+
 const forget = async () => {
   for (const k of [TOKEN_KEY, STAFF_KEY, BACK_KEY]) await SecureStore.deleteItemAsync(k).catch(() => {});
 };
 const read = async <T,>(key: string): Promise<T | null> => {
-  const raw = await SecureStore.getItemAsync(key).catch(() => null);
+  const raw = await withTimeout(SecureStore.getItemAsync(key).catch(() => null), 4000, null);
   try { return raw ? (JSON.parse(raw) as T) : null; } catch { return null; }
 };
 
@@ -42,7 +45,7 @@ export const useSession = create<SessionState>((set, get) => ({
 
   // No refresh token: every cold start re-validates the stored token (company: /me, staff: a staff-only call).
   hydrate: async () => {
-    const token = await SecureStore.getItemAsync(TOKEN_KEY).catch(() => null);
+    const token = await withTimeout(SecureStore.getItemAsync(TOKEN_KEY).catch(() => null), 4000, null);
     if (!token) return set({ status: 'signedOut', token: null, me: null, staff: null, supportBack: null });
     const staff = await read<SuiteUser>(STAFF_KEY);
     const back = await read<Back>(BACK_KEY);
