@@ -11,6 +11,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   slug: 'mobile-suite-skreenit',
   owner: 'itsmepskiran',
   version: '1.0.0',
+  platforms: ['ios', 'android'], // no web build
   orientation: 'portrait',
   icon: './assets/images/icon.png',
   scheme: 'skreenit-suite',

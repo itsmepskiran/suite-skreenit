@@ -1,0 +1,15 @@
+# Every push to main publishes the app's code to Expo as an update on the "expo-go" branch.
+# Open it from the Projects list in Expo Go (signed in to the Expo account): no APK, no Xcode, no server to run.
+# This branch is separate from the store/install channels, so it never reaches installed builds by accident.
+name: Publish for Expo Go
+
+on:
+  push:
+    branches: ['main']
+
+jobs:
+  publish:
+    name: Publish update
+    type: update
+    params:
+      branch: expo-go
