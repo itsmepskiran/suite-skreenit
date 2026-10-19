@@ -36,7 +36,7 @@ export default function AppLayout() {
     <Tabs screenOptions={{ headerShown: true, headerStatusBarHeight: inSupport ? 0 : undefined, headerTitleStyle: { fontWeight: '700' }, tabBarActiveTintColor: colors.primary, sceneStyle: { backgroundColor: colors.bg } }}>
       <Tabs.Screen name="home" options={{ title: 'Home', tabBarIcon: icon('house') }} />
       <Tabs.Screen name="modules" options={{ title: 'Modules', headerShown: false, tabBarIcon: icon('table-cells-large') }} />
-      <Tabs.Screen name="myspace" options={{ title: 'My space', tabBarIcon: icon('user-clock') }} />
+      <Tabs.Screen name="myspace" options={{ title: 'My space', headerShown: false, tabBarIcon: icon('user-clock') }} />
       <Tabs.Screen name="account" options={{ title: 'Account', tabBarIcon: icon('circle-user') }} />
     </Tabs>
     </View>
